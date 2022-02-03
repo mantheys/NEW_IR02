@@ -1,10 +1,8 @@
-/*Macro para visualizar eventos y como afectan los cortes que queremos establecer a la selección de eventos*/
+#include "lib/headers.h"
 
-#include"lib/headers.h"
-
-void Analyse(int r, int ch, double range1, double range2, std::vector<int> triggerchannels, string path = "ROOT/", string adc = "DT5725", string m = "Month", bool pedestal_plot = false, bool peaktimes_plot = false, bool chargehist_plot = false, bool event_plot = false)
-{
-  ana::Run_t myrun(r,{{path+Form("run%i_ch%i.root",r,ch),"ADC2"}},adc,range1, range2, 200, -1);
+void Analyse(string path, int r, int ch, int ped, double range1, double range2, std::vector<bool> conditions) 
+{// Macro para visualizar eventos y ver cómo afectan los cortes que queremos establecer
+  ana::Run_t myrun(r,{{path+Form("run%i_ch%i.root",r,ch),"ADC0"}},"DT5725",range1, range2, ped, -1);
   
   std::vector<double> SPEAmp={38.6,24.8,25.5};//Amplitud del SPE en cuentas de ADC
   myrun.SetSPEAmps(SPEAmp);
@@ -13,24 +11,24 @@ void Analyse(int r, int ch, double range1, double range2, std::vector<int> trigg
   myrun.Process();
   myrun.ParSet->t3 = 500e-9; //Fijamos el rango de integración de Q3 como 500ns tras el pico.
 	
-  if (pedestal_plot == true){myrun.PlotPedestals();}
-  if (peaktimes_plot == true){myrun.PlotPeakTimes();}
-  if (chargehist_plot == true){
-    TH1F* h0 = myrun.TH1Charge(0,"Range","pC");
-    h0->Draw();
-    lets_pause();
+  if (conditions[0] == true){myrun.PlotPedestals();}
+  if (conditions[1] == true){myrun.PlotPeakTimes();}
+  if (conditions[2] == true)
+  {
+    TH1F* h0 = myrun.TH1Charge(0,"Range","pC");h0->Draw();gPad->Update();lets_pause();
+    if (conditions[3] == true){myrun.autofit(h0);lets_pause();}
   }
-  // string BoxOption="", std::vector<double> *ranges=NULL, int Rebin=1, int CutOption=-1, //este loop nos muestra las waveforms evento a evento, marcando cuales nos estaríamos quitando con nuestros cortes.
-  if (event_plot == true){myrun.LoopWaveforms(0,"paqr",NULL);}
+  if (conditions[4] == true){myrun.LoopWaveforms(0,"paqr",NULL);}
 
   myrun.Close();
 }
 
 void EventDisplay(string input = "config_file,txt")
 {
-  int run; int ch; 
+  int run; int ch; int ped;
   run = IntInput(input, "RUN"); 
   ch = IntInput(input, "CHANNEL");
+  ped = IntInput(input, "PEDESTALRANGE");
 
   double isignaltime; double fsignaltime;
   isignaltime = DoubleInput(input, "ISIGNALTIME");
@@ -39,25 +37,20 @@ void EventDisplay(string input = "config_file,txt")
   string path;
   path = StringInput(input, "PATH");
 
-  bool pedestal; bool peaktimes; bool chargehist; bool event;
-  pedestal = BoolInput(input, "PLOTPEDESTALS");
-  peaktimes = BoolInput(input, "PLOTPEAKTIMES");
-  chargehist = BoolInput(input, "CHARGEHIST");
-  event = BoolInput(input, "EVENTDISPLAY");
-  
+  std::vector<string> keywords; std::vector<bool> conditions; conditions = {};
+  keywords = {"PLOTPEDESTALS","PLOTPEAKTIMES","CHARGEHIST", "CHARGEHISTAUTOFIT", "EVENTDISPLAY"};
 
-  Analyse(run, ch, isignaltime, fsignaltime, {0}, path, "DT5725", "Month", pedestal, peaktimes, chargehist, event);
-  /*Argumentos:
-  1.  Numero de Run
-  2.  Tiempo inicial donde empezar a buscar la señal de trigger (s)
-  3.  Tiempo final donde dejar de buscar la señal de trigger (s)
-  4.  Vector con los canales de trigger, para limpiar ruido.
-  5.  Path de la carpeta que incluye los archivos .root
-  5.  Versión del ADC usada (v1720 o DT5725)
-  6.  Nombre descriptivo
-  7.  Condición para aplicar la función PlotPedestals
-  8.  Condición para aplicar la función PlotPeakTimes
-  9.  Condición para aplicar la función TH1Charge
-  10. Condición para aplicar la función LoopWaveforms
+  for(vector<string>::const_iterator key = keywords.begin(); key != keywords.end(); ++key)
+  {bool condition; condition = BoolInput(input, *key); conditions.push_back(condition);}
+  
+  Analyse(path, run, ch, ped, isignaltime, fsignaltime, conditions);
+  /*  0.  Path de la carpeta que incluye los archivos .root
+      1.  Numero de Run
+      2.  Canal del ADC que figura en el nombre del .root
+      3.  Rango de tiempo que caracteriza el pedestal (en unidades de 4us)
+      3.  Tiempo inicial donde empezar a buscar la señal de trigger (s)
+      4.  Tiempo final donde dejar de buscar la señal de trigger (s)
+      5.  Path de la carpeta que incluye los archivos .root
+      6.  Vector de condiciones (0/1 false/true) para activar las funciones en orden de pariencia.
   */
 }
