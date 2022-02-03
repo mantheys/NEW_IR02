@@ -4,10 +4,10 @@
 
 #include "lib/headers.h"
 
-void Analyse(string path, int r, int ch, int ped, double range1, double range2, std::vector<bool> conditions) 
+void Analyse(string adc, string path, int r, int ch, int ped, double range1, double range2, std::vector<bool> conditions) 
 { // Macro para visualizar eventos y ver cómo afectan los cortes que queremos establecer
   // En Analyse se incluyen las variables que se pasan a la clase Run_t y las condiciones de activación del resto de funciones
-  ana::Run_t myrun(r,{{path+Form("run%i_ch%i.root",r,ch),"ADC0"}},"DT5725",range1, range2, ped, -1);
+  ana::Run_t myrun(r,{{path+Form("run%i_ch%i.root",r,ch),"ADC0"}}, adc, range1, range2, ped, -1);
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //___ESTE ES EL CUERPO PRINCIPAL DE LA MACRO DONDE SE CONFIGURA SU FUNCIONALIDAD Y FACTORES DE CONVERSIÓN___//
@@ -43,8 +43,8 @@ void EventDisplay(string input = "config_file,txt")
   double isignaltime; double fsignaltime;
   isignaltime = DoubleInput(input, "ISIGNALTIME"); fsignaltime = DoubleInput(input, "FSIGNALTIME");
 
-  string path;
-  path = StringInput(input, "PATH");
+  string adc;string path;
+  adc = StringInput(input, "ADC"); path = StringInput(input, "PATH");
 
   std::vector<string> keywords; std::vector<bool> conditions; conditions = {};
   keywords = {"PLOTPEDESTALS","PLOTPEAKTIMES","CHARGEHIST", "CHARGEHISTAUTOFIT", "EVENTDISPLAY"};
@@ -56,7 +56,7 @@ void EventDisplay(string input = "config_file,txt")
   //___LAS VARIABLES QUE SE HAN IMPORTADO SE PASAN A LA FUNCIÓN ANALYSE QUE A SU VEZ LLAMA AL RUN_T PERTINENTE Y EJECUTA LAS FUNCIONES ESCOGIDAS___//  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  Analyse(path, run, ch, ped, isignaltime, fsignaltime, conditions);
+  Analyse(adc, path, run, ch, ped, isignaltime, fsignaltime, conditions);
   /*  0.  Path de la carpeta que incluye los archivos .root
       1.  Numero de Run
       2.  Canal del ADC que figura en el nombre del .root
