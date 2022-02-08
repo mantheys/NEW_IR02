@@ -7,7 +7,7 @@
 void Analyse(string adc, string path, int r, int ch, int ped, double range1, double range2, std::vector<bool> conditions) 
 { // Macro para visualizar eventos y ver cómo afectan los cortes que queremos establecer
   // En Analyse se incluyen las variables que se pasan a la clase Run_t y las condiciones de activación del resto de funciones
-  ana::Run_t myrun(r,{{path+Form("run%i_ch%i.root",r,ch),"ADC0"}}, adc, range1, range2, ped, -1);
+  ana::Run_t myrun(r,{{path+Form("run%i_ch%i.root",r,ch),"ADC2"}}, adc, range1, range2, ped, -1);
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //___ESTE ES EL CUERPO PRINCIPAL DE LA MACRO DONDE SE CONFIGURA SU FUNCIONALIDAD Y FACTORES DE CONVERSIÓN___//
@@ -27,10 +27,11 @@ void Analyse(string adc, string path, int r, int ch, int ped, double range1, dou
     if (conditions[3] == true){myrun.autofit(h0);lets_pause();}
   }
   if (conditions[4] == true){myrun.LoopWaveforms(0,"paqr",NULL);}
+  if (conditions[5] == true){myrun.TH1Amp(0);}
   myrun.Close();
 }
 
-void EventDisplay(string input = "config_file,txt")
+void EventDisplay(string input = "config_file.txt")
 { // Función principal de esta macro. Las direfentes funciones _Input() llaman al archivo de configuracion e importan las variables pertinentes
 
   /////////////////////////////////////////////////////////////////////
@@ -47,7 +48,7 @@ void EventDisplay(string input = "config_file,txt")
   adc = StringInput(input, "ADC"); path = StringInput(input, "PATH");
 
   std::vector<string> keywords; std::vector<bool> conditions; conditions = {};
-  keywords = {"PLOTPEDESTALS","PLOTPEAKTIMES","CHARGEHIST", "CHARGEHISTAUTOFIT", "EVENTDISPLAY"};
+  keywords = {"PLOTPEDESTALS","PLOTPEAKTIMES","CHARGEHIST", "CHARGEHISTAUTOFIT", "EVENTDISPLAY", "MAXAMPHIST"};
 
   for(vector<string>::const_iterator key = keywords.begin(); key != keywords.end(); ++key)
   {bool condition; condition = BoolInput(input, *key); conditions.push_back(condition);}
