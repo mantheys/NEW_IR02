@@ -28,6 +28,7 @@ void Analyse(string adc, string path, int r, int ch, int ped, double range1, dou
   }
   if (conditions[4] == true){myrun.LoopWaveforms(0,"paqr",NULL);}
   if (conditions[5] == true){myrun.TH1Amp(0);}
+  
   myrun.Close();
 }
 
@@ -48,7 +49,7 @@ void EventDisplay(string input = "config_file.txt")
   adc = StringInput(input, "ADC"); path = StringInput(input, "PATH");
 
   std::vector<string> keywords; std::vector<bool> conditions; conditions = {};
-  keywords = {"PLOTPEDESTALS","PLOTPEAKTIMES","CHARGEHIST", "CHARGEHISTAUTOFIT", "EVENTDISPLAY", "MAXAMPHIST"};
+  keywords = {"PLOTPEDESTALS","PLOTPEAKTIMES","CHARGEHIST","CHARGEHISTAUTOFIT","EVENTDISPLAY","MAXAMPHIST"};
 
   for(vector<string>::const_iterator key = keywords.begin(); key != keywords.end(); ++key)
   {bool condition; condition = BoolInput(input, *key); conditions.push_back(condition);}
