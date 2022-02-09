@@ -26,7 +26,7 @@ void Analyse(int r, double range1, double range2, std::vector<int> triggerchanne
 
 void AverageWaveform()
 {
-  Analyse(79, 0.0, 4e-6, {0}, 1);
+  for (int run=irun; run<=frun; r++) Analyse(79, 0.0, 4e-6, {0}, 1);
   /*Argumentos:
   1. numero de Run
   2. tiempo inicial donde empezar a buscar la señal de trigger (s)

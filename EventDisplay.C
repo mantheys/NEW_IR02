@@ -5,7 +5,7 @@
 
 void Analyse(string adc, string path, int r, int ch, int ped, double range1, double range2, std::vector<bool> conditions) 
 { /* Macro para visualizar eventos y ver cómo afectan los cortes que queremos establecer
-  */ En Analyse se incluyen las variables que se pasan a la clase Run_t y las condiciones de activación del resto de funciones.
+  En Analyse se incluyen las variables que se pasan a la clase Run_t y las condiciones de activación del resto de funciones. */
   
   ana::Run_t myrun(r,{{path+Form("run%i_ch%i.root",r,ch),"ADC2"}}, adc, range1, range2, ped, -1);
 
@@ -58,7 +58,7 @@ void EventDisplay(string input = "config_file.txt")
   //___LAS VARIABLES QUE SE HAN IMPORTADO SE PASAN A LA FUNCIÓN ANALYSE QUE A SU VEZ LLAMA AL RUN_T PERTINENTE Y EJECUTA LAS FUNCIONES ESCOGIDAS___//  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  for (int run=irun; run<=frun; r++) Analyse(adc, path, run, ch, ped, isignaltime, fsignaltime, conditions);
+  for (int run=irun; run<=frun; run++) Analyse(adc, path, run, ch, ped, isignaltime, fsignaltime, conditions);
   /*  0.  Path de la carpeta que incluye los archivos .root
       1.  Numero de Run
       2.  Canal del ADC que figura en el nombre del .root
