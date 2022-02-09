@@ -1,10 +1,19 @@
 #ifndef Run_h
 #define Run_h
+#include <stdio.h>
 #include "HistogramCollection.h"
 #include "Decon.h"
+#include <iostream>
+#include <string>
+#include <cstring>
 
 namespace ana
 {
+   float Square(float value){
+    // Multiply value two times
+    return value*value;
+   }
+   
    class Run_t
    {
    public:
@@ -4178,24 +4187,70 @@ namespace ana
          
          lets_pause();
 
-         // ------------ Volcamos a txt --------------- 
+         // ------------ Volcamos a txt ---------------
          if (print == true)
          {
-            string filename = output;
-            //cout << "File name?:"; cin >> filename;
-            double mu = fb->GetParameter(3*0+1), Dmu = fb->GetParError(3*0+1);
-            double sigma = fb->GetParameter(3*0+2), Dsigma = fb->GetParError(3*0+2);
-            double amp = fb->GetParameter(0), Damp = fb->GetParError(0);
-      
-            FILE *f = fopen(Form("fit_data/%s.txt",filename.c_str()), "a");
-            if (f == NULL)
+            string filename = output+"_GAUSS_FIT";
+            ifstream ifile;
+            ifile.open("fit_data/"+filename+".txt");
+            string str = "fit_data/"+filename+".txt";
+            char c[str.size() + 1];
+            strcpy(c, str.c_str());
+            if(ifile){remove(c);}
+            for (int p=0; p<npeaks;p++)
             {
-               printf("Error opening file!\n");
-               exit(1);
+               double mu = fb->GetParameter(3*p+1), Dmu = fb->GetParError(3*p+1);
+               double sigma = fb->GetParameter(3*p+2), Dsigma = fb->GetParError(3*p+2);
+               double amp = fb->GetParameter(p), Damp = fb->GetParError(p);
+         
+               FILE *f = fopen(Form("fit_data/%s.txt",filename.c_str()), "a");
+               if (f == NULL)
+               {
+                  printf("Error opening file!\n");
+                  exit(1);
+               }
+               fprintf(f, "%i\t%f\t%f\t%f\t%f\n", p, mu, Dmu, sigma, Dsigma);
+               fclose(f);
             }
-            fprintf(f, "%f\t%f\t%f\t%f\t%f\t%f\n", mu, Dmu, sigma, Dsigma, amp, Damp);
-            fclose(f);
-            cout << "\nFile with name '"; cout << output; cout << ".txt' has been generated.\n\n";
+            cout << "\nFile with name '"; cout << filename; cout << ".txt' has been generated.\n\n";
+
+            if (npeaks>1)
+            {
+               string filename = output+"_GAIN";
+               ifstream ifile;
+               ifile.open("fit_data/"+filename+".txt");
+               string str = "fit_data/"+filename+".txt";
+               char c[str.size() + 1];
+               strcpy(c, str.c_str());
+               if(ifile){remove(c);}
+               for (int p=1; p<npeaks;p++)
+               {  
+                  double mu0 = fb->GetParameter(3*(p-1)+1), Dmu0 = fb->GetParError(3*(p-1)+1);
+                  double sigma0 = fb->GetParameter(3*(p-1)+2), Dsigma0 = fb->GetParError(3*(p-1)+2);
+                  double mu = fb->GetParameter(3*p+1), Dmu = fb->GetParError(3*p+1);
+                  double sigma = fb->GetParameter(3*p+2), Dsigma = fb->GetParError(3*p+2);
+                  
+                  double gain = (mu-mu0)*1e-12/1.602e-19;
+                  double Dgain = pow((Square(Dmu)+Square(Dmu0)),0.5)*1e-12/1.602e-19;
+                  double sn0 = (mu-mu0)/sigma0;
+                  double Dsn0 = sn0*pow(((Square(Dmu)+Square(Dmu0))/Square(mu-mu0))+Square(Dsigma0/sigma0),0.5);
+                  double sn1 = (mu-mu0)/sigma;
+                  double Dsn1 = sn1*pow(((Square(Dmu)+Square(Dmu0))/Square(mu-mu0))+Square(Dsigma/sigma),0.5);
+                  double snc = (mu-mu0)/pow((Square(sigma)+Square(sigma0)),0.5);
+                  double Dsnc = snc*pow((Square(Dgain/gain)+Square(sigma0*Dsigma0/(Square(sigma)+Square(sigma0)))+Square(sigma*Dsigma/(Square(sigma)+Square(sigma0)))),0.5);
+
+                  FILE *f = fopen(Form("fit_data/%s.txt",filename.c_str()), "a");
+                  if (f == NULL)
+                  {
+                     printf("Error opening file!\n");
+                     exit(1);
+                  }
+                  fprintf(f, "%i\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n", p, gain, Dgain, sn0, Dsn0, sn1, Dsn1, snc, Dsnc);
+                  fclose(f);
+               }
+               cout << "\nFile with name '"; cout << filename; cout << ".txt' has been generated.\n\n";
+            }
+            
          }   
       }
    };

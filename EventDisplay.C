@@ -29,8 +29,8 @@ void Analyse(string adc, string path, int r, int ch, int ped, double range1, dou
   }
   if (conditions[4] == true){TH1F *h0 = myrun.TH1Amp(0);h0->Draw();gPad->Update();lets_pause();}
   if (conditions[5] == true){myrun.LoopWaveforms(0,"paqr",NULL);}
-  
-  //myrun.Close();
+ 
+  myrun.Close();
 }
 
 void EventDisplay(string input = "config_file.txt")
