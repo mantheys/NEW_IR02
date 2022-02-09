@@ -1,12 +1,12 @@
+#include "lib/headers.h"
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //___EVENTDISPLAY.C ES UNA MACRO PARA VISUALIZAR EVENTOS Y HACER UN ANALISIS PREELIMINAR E INDIVIDUALIZADO DE CORTES Y FACTORES DETERMINANTES___//
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "lib/headers.h"
-
 void Analyse(string adc, string path, int r, int ch, int ped, double range1, double range2, std::vector<bool> conditions) 
-{ // Macro para visualizar eventos y ver cómo afectan los cortes que queremos establecer
-  // En Analyse se incluyen las variables que se pasan a la clase Run_t y las condiciones de activación del resto de funciones
+{ /* Macro para visualizar eventos y ver cómo afectan los cortes que queremos establecer
+  */ En Analyse se incluyen las variables que se pasan a la clase Run_t y las condiciones de activación del resto de funciones.
+  
   ana::Run_t myrun(r,{{path+Form("run%i_ch%i.root",r,ch),"ADC2"}}, adc, range1, range2, ped, -1);
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,23 +33,23 @@ void Analyse(string adc, string path, int r, int ch, int ped, double range1, dou
 }
 
 void EventDisplay(string input = "config_file.txt")
-{ // Función principal de esta macro. Las direfentes funciones _Input() llaman al archivo de configuracion e importan las variables pertinentes
+{ /* Función principal de esta macro. Las direfentes funciones _Input() llaman al archivo de configuracion e importan las variables pertinentes */
 
   /////////////////////////////////////////////////////////////////////
   //___AQUI SE IMPORTAN LAS VARIABLES DEL ARCHIVO DE CONFIGURACIÓN___//
   /////////////////////////////////////////////////////////////////////  
   
-  int run; int ch; int ped;
-  run = IntInput(input, "RUN"); ch = IntInput(input, "CHANNEL"); ped = IntInput(input, "PEDESTALRANGE");
+  int irun; int frun; int ch; int ped;
+  irun = IntInput(input, "I_RUN"); frun = IntInput(input, "F_RUN"); ch = IntInput(input, "CHANNEL"); ped = IntInput(input, "PEDESTAL_RANGE");
 
   double isignaltime; double fsignaltime;
-  isignaltime = DoubleInput(input, "ISIGNALTIME"); fsignaltime = DoubleInput(input, "FSIGNALTIME");
+  isignaltime = DoubleInput(input, "I_SIGNALTIME"); fsignaltime = DoubleInput(input, "F_SIGNALTIME");
 
-  string adc;string path;
+  string adc; string path;
   adc = StringInput(input, "ADC"); path = StringInput(input, "PATH");
 
   std::vector<string> keywords; std::vector<bool> conditions; conditions = {};
-  keywords = {"PLOTPEDESTALS","PLOTPEAKTIMES","CHARGEHIST","CHARGEHISTAUTOFIT","EVENTDISPLAY","MAXAMPHIST"};
+  keywords = {"PLOT_PEDESTALS","PLOT_PEAKTIMES","CHARGE_HIST","CHARGE_HIST_AUTOFIT","EVENT_DISPLAY","MAX_AMP_HIST"};
 
   for(vector<string>::const_iterator key = keywords.begin(); key != keywords.end(); ++key)
   {bool condition; condition = BoolInput(input, *key); conditions.push_back(condition);}
@@ -58,7 +58,7 @@ void EventDisplay(string input = "config_file.txt")
   //___LAS VARIABLES QUE SE HAN IMPORTADO SE PASAN A LA FUNCIÓN ANALYSE QUE A SU VEZ LLAMA AL RUN_T PERTINENTE Y EJECUTA LAS FUNCIONES ESCOGIDAS___//  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  Analyse(adc, path, run, ch, ped, isignaltime, fsignaltime, conditions);
+  for (int run=irun; run<=frun; r++) Analyse(adc, path, run, ch, ped, isignaltime, fsignaltime, conditions);
   /*  0.  Path de la carpeta que incluye los archivos .root
       1.  Numero de Run
       2.  Canal del ADC que figura en el nombre del .root

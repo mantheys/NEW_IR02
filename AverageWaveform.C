@@ -9,16 +9,16 @@ void Analyse(int r, double range1, double range2, std::vector<int> triggerchanne
   for (int i = 0; i < 3; i++)
   Gains[i] = Gains[i] / 1.602e-7; //(1e-19+12)
   
-  ana::Run_t myrun(r, {{Form("/pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Jan/ROOT/run%i_ch6.root", r),"ADC2"}}, adc, range1, range2, 425, -1);
+  ana::Run_t myrun(r, {{Form("/pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Jan/ROOT/run%i_ch6.root", r),"ADC2"}}, adc, range1, range2, 100, -1);
   myrun.SetGains(Gains);
   myrun.SetSPEAmps(SPEAmp);
   myrun.SelectChannels({0});
 
-  myrun.SetCutMaxAmplitudeRange(0,20);
+  myrun.SetCutMaxAmplitudeRange(40,1000000);
   myrun.SetMaximumWaveformsToProcess(NEvts);
   myrun.ParSet->setADCAmplitudeThreshold(-1000);
 
-  myrun.Plot36("ScintProfFirstSignalBin", Form("/pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Jan/AnalysisROOT/run%i_ScintProfFirstSignalBin_SC_Noise.root", r), 0, 1);
+  myrun.Plot36("ScintProfFirstSignalBin", Form("/pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Jan/AnalysisROOT/run%i_ScintProfFirstSignalBin_SC.root", r), 0, 1);
   //myrun.Plot36("ScintProf", Form("AnalysisROOT/run%i_ScintProfNoise.root", r), 0, 1);
 
   myrun.Close();
@@ -26,7 +26,7 @@ void Analyse(int r, double range1, double range2, std::vector<int> triggerchanne
 
 void AverageWaveform()
 {
-  Analyse(81, 0.0, 4e-6, {0}, 1);
+  Analyse(79, 0.0, 4e-6, {0}, 1);
   /*Argumentos:
   1. numero de Run
   2. tiempo inicial donde empezar a buscar la señal de trigger (s)
