@@ -4120,61 +4120,84 @@ namespace ana
          cout << "ntuple dumped to " << filename << endl;
       }
       
-      void autofit(TH1F* h){ // Función para realizar ajustes automaticos
-
-      int npeaks = 0; cout << "N of peaks?: "; cin >> npeaks;
-	   double_t par[100];
-	   double min_fit, max_fit;
-	   cout << "Min value for fit: "; cin >> min_fit;
-	   cout << "Max value for fit: "; cin >> max_fit;
-	   // Use TSpectrum to find the peak candidates
-	   h->GetXaxis()->SetRangeUser(min_fit, max_fit);
-	   TSpectrum *s = new TSpectrum(2*npeaks,1);
-	   Int_t nfound = s->Search(h,2,"goff",0.01);
-	   printf("Found %d candidate peaks to fit\n",nfound);
-	   h->GetXaxis()->SetRange(0,0);
-	   Double_t *xpeaks;
-	   xpeaks = s->GetPositionX();
-	
-   	for (int p=0;p<npeaks;p++) {
-         Double_t xp = xpeaks[p];
-         Int_t bin = h->GetXaxis()->FindBin(xp);
-         Double_t yp = h->GetBinContent(bin);
-         //if (yp-TMath::Sqrt(yp) < fline->Eval(xp)) continue;
-         par[3*p] = yp; // "height"
-         par[3*p+1] = xp; // "mean"
-         par[3*p+2] = 0.05; // "sigma"
-         // cout << Form("sigma_%i: ", p); cin >> par[3*npeaks+2];
-         //~ p++;
-	   }
-	
-	   //int_t max_bin[npeaks], j=0;
-	   string init = Form("gaus(0)");
-	   string added;
-	   for (int i=1; i<npeaks; i++){
-   		added = Form("+gaus(%i)",i*3);
-	   	init = init + added;
-		}
-	   //int Nbins = h->GetNbinsX();
-	
-	   TF1 *fb = new TF1("fb",init.c_str(),min_fit,max_fit);
-	   fb->SetParameters(par);
-
-	   h->Fit("fb","MER+","HIST SAME",min_fit, max_fit); gPad->Update();
-	   lets_pause();
-	
-	   cout << "Printing mean values: " << endl;
-	   for (int p=0; p<npeaks;p++){
-	      cout << Form("mu_%i: ", p) << fb->GetParameter(3*p+1) << " +- " << fb->GetParError(3*p+1) << endl;
-	   }
-	   cout << "Printing sigma values: " << endl;
-	   for (int p=0; p<npeaks;p++){
-   	   cout << Form("sigma_%i: ", p) << fb->GetParameter(3*p+2) << " +- " << fb->GetParError(3*p+2) << endl;
-	   }
-	   lets_pause();
-
-      }
+      void autofit(TH1F* h, bool print, string output)
+      { // Función para realizar ajustes automaticos
+         int npeaks = 0; cout << "N of peaks?: "; cin >> npeaks;
+         double_t par[100];
+         double min_fit, max_fit;
+         cout << "Min value for fit: "; cin >> min_fit;
+         cout << "Max value for fit: "; cin >> max_fit;
+         // Use TSpectrum to find the peak candidates
+         h->GetXaxis()->SetRangeUser(min_fit, max_fit);
+         TSpectrum *s = new TSpectrum(2*npeaks,1);
+         Int_t nfound = s->Search(h,2,"goff",0.01);
+         printf("Found %d candidate peaks to fit\n",nfound);
+         h->GetXaxis()->SetRange(0,0);
+         Double_t *xpeaks;
+         xpeaks = s->GetPositionX();
       
+         for (int p=0;p<npeaks;p++)
+         {
+            Double_t xp = xpeaks[p];
+            Int_t bin = h->GetXaxis()->FindBin(xp);
+            Double_t yp = h->GetBinContent(bin);
+            //if (yp-TMath::Sqrt(yp) < fline->Eval(xp)) continue;
+            par[3*p] = yp; // "height"
+            par[3*p+1] = xp; // "mean"
+            par[3*p+2] = 0.05; // "sigma"
+            // cout << Form("sigma_%i: ", p); cin >> par[3*npeaks+2];
+            //~ p++;
+         }
+	
+         //int_t max_bin[npeaks], j=0;
+         string init = Form("gaus(0)");
+         string added;
+         for (int i=1; i<npeaks; i++)
+         {
+            added = Form("+gaus(%i)",i*3);
+            init = init + added;   
+         }
+	      //int Nbins = h->GetNbinsX();
+	
+         TF1 *fb = new TF1("fb",init.c_str(),min_fit,max_fit);
+         fb->SetParameters(par);
+
+         h->Fit("fb","MER+","HIST SAME",min_fit, max_fit); gPad->Update();
+         lets_pause();
+      
+         cout << "Printing mean values: " << endl;
+         for (int p=0; p<npeaks;p++)
+         {
+            cout << Form("mu_%i: ", p) << fb->GetParameter(3*p+1) << " +- " << fb->GetParError(3*p+1) << endl;
+         }
+         cout << "Printing sigma values: " << endl;
+         for (int p=0; p<npeaks;p++)
+         {
+            cout << Form("sigma_%i: ", p) << fb->GetParameter(3*p+2) << " +- " << fb->GetParError(3*p+2) << endl;
+         }
+         
+         lets_pause();
+
+         // ------------ Volcamos a txt --------------- 
+         if (print == true)
+         {
+            string filename = output;
+            //cout << "File name?:"; cin >> filename;
+            double mu = fb->GetParameter(3*0+1), Dmu = fb->GetParError(3*0+1);
+            double sigma = fb->GetParameter(3*0+2), Dsigma = fb->GetParError(3*0+2);
+            double amp = fb->GetParameter(0), Damp = fb->GetParError(0);
+      
+            FILE *f = fopen(Form("fit_data/%s.txt",filename.c_str()), "a");
+            if (f == NULL)
+            {
+               printf("Error opening file!\n");
+               exit(1);
+            }
+            fprintf(f, "%f\t%f\t%f\t%f\t%f\t%f\n", mu, Dmu, sigma, Dsigma, amp, Damp);
+            fclose(f);
+            cout << "\nFile with name '"; cout << output; cout << ".txt' has been generated.\n\n";
+         }   
+      }
    };
 }
 #endif

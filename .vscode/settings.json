@@ -38,6 +38,7 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "Scintillation.C": "cpp",
-        "SimpleAnalysis.C": "cpp"
+        "SimpleAnalysis.C": "cpp",
+        "Calibration.C": "cpp"
     }
 }
