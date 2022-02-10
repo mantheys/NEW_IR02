@@ -8,7 +8,7 @@ void Analyse(string adc, string path, string output, int r, int ch, int ped, dou
 { /* Macro para visualizar eventos y ver cómo afectan los cortes que queremos establecer
   En Analyse se incluyen las variables que se pasan a la clase Run_t y las condiciones de activación del resto de funciones. */
   
-  ana::Run_t myrun(r,{{path+Form("run%i_ch%i.root",r,ch),"ADC0"}}, adc, range1, range2, ped, -1);
+  ana::Run_t myrun(r,{{path+Form("run%02i_ch%i.root",r,ch),"ADC0"}}, adc, range1, range2, ped, -1);
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //___ESTE ES EL CUERPO PRINCIPAL DE LA MACRO DONDE SE CONFIGURA SU FUNCIONALIDAD Y FACTORES DE CONVERSIÓN___//
