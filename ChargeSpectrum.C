@@ -63,7 +63,7 @@ void Draw(std::vector<int> mych, std::vector<int> runs, std::vector<string> name
  if(CustomMaxRange!=0) for(int i=0;i<n;i++) myvar[i].limitup=CustomMaxRange;
 
  TFile *ifile[n];
- for(int i=0;i<n;i++) ifile[i]= new TFile(Form("AnalysisROOT/Run%i_NTuple.root",runs[i])); 
+ for(int i=0;i<n;i++) ifile[i]= new TFile(Form("AnalysisROOT/run%02i_NTuple.root",runs[i])); 
  TNtuple *nt[n];
  Float_t ch; 
  Float_t time; 
@@ -222,7 +222,7 @@ void Draw_April(std::vector<int> mych, std::vector<int> runs, std::vector<string
  if(CustomMaxRange!=0) for(int i=0;i<n;i++) myvar[i].limitup=CustomMaxRange;
 
  TFile *ifile[n];
- for(int i=0;i<n;i++) ifile[i]= new TFile(Form("AnalysisROOT_April/Run%i_NTuple.root",runs[i])); 
+ for(int i=0;i<n;i++) ifile[i]= new TFile(Form("AnalysisROOT_April/run%02i_NTuple.root",runs[i])); 
  TNtuple *nt[n];
  Float_t ch; 
  Float_t time; 
@@ -336,7 +336,7 @@ lets_pause();
 void DrawSum(std::vector<int> mych, int n, int runs[], string name[], bool rate=true, string var="Q3PE")
 {
  TFile *ifile[n];
- for(int i=0;i<n;i++) ifile[i]= new TFile(Form("AnalysisROOT/Run%i_NTuple.root",runs[i])); 
+ for(int i=0;i<n;i++) ifile[i]= new TFile(Form("AnalysisROOT/run%02i_NTuple.root",runs[i])); 
  TNtuple *nt[n];
  Double_t duration[n];
  Float_t evt;
