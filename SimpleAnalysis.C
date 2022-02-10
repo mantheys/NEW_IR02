@@ -24,10 +24,10 @@ void Analyse(int r, double range1, double range2, std::vector<int> triggerchanne
                               24.8,
                               25.5};//Amplitud del SPE en cuentas de ADC
   for(int i=0;i<4;i++) Gains[i]=Gains[i]/1.602e-7; //(1e-19+12)
-  ana::Run_t myrun(r,{{Form("/pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Oct/ROOT/run%i_ch2.root",r),"ADC0"},
-                      {Form("/pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Oct/ROOT/run%i_ch4.root",r),"ADC1"},
-                      {Form("/pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Oct/ROOT/run%i_ch5.root",r),"ADC2"},
-                      {Form("/pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Oct/ROOT/run%i_ch6.root",r),"ADC3"}},
+  ana::Run_t myrun(r,{{Form("/pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Oct/ROOT/run%02i_ch2.root",r),"ADC0"},
+                      {Form("/pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Oct/ROOT/run%02i_ch4.root",r),"ADC1"},
+                      {Form("/pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Oct/ROOT/run%02i_ch5.root",r),"ADC2"},
+                      {Form("/pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Oct/ROOT/run%02i_ch6.root",r),"ADC3"}},
                       adc,range1, range2,250,Nevts);
   myrun.SetGains(Gains);
   myrun.SetSPEAmps(SPEAmp);
@@ -119,7 +119,7 @@ void Analyse(int r, double range1, double range2, std::vector<int> triggerchanne
 
   //  myrun.LoopWaveforms(0,"pqr",NULL,1,0);
   // myrun.Plot36("Charge_Q3MaxPeakRange",Form("AnalysisROOT/Run%i_Q3MaxPeak500ns.root",r));
-  myrun.DumpVariableToNtuple(Form("AnalysisROOT/Run%i_NTuple.root",r),0);
+  myrun.DumpVariableToNtuple(Form("AnalysisROOT/run%02i_NTuple.root",r),0);
   myrun.Close();
 }
 
