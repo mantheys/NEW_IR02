@@ -36,7 +36,7 @@ TH1D* CenterHist(TH1D* h, int Rebin=1, double bincenter=1.3e-6)
 void Draw(int n, int *runs, string* name, int pm)
 {
 ana::HistogramCollection_t mycol[n];
- for(int i=0;i<n;i++) mycol[i].GetFromFile(Form("AnalysisROOT/Run%i_ScintProfFirstSignalBin.root",runs[i]));
+ for(int i=0;i<n;i++) mycol[i].GetFromFile(Form("AnalysisROOT/run%02i_ScintProfFirstSignalBin.root",runs[i]));
  cout << "Hist loaded " << endl;
   TH1 *h[n];
  for(int i=0;i<n;i++)
@@ -204,8 +204,8 @@ void Scintillation()
 		"Mayo"};
                   
    string runs[n]={
-		"AnalysisROOT_PMT_APRIL/Run12_ScintProfFirstSignalBin.root",
-		"AnalysisROOT/Run15_ScintProfFirstSignalBin.root"};
+		"AnalysisROOT_PMT_APRIL/run12_ScintProfFirstSignalBin.root",
+		"AnalysisROOT/run15_ScintProfFirstSignalBin.root"};
    
    int pms[n]={0,0};
    int rebin [n]={1,1};
