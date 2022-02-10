@@ -5,7 +5,7 @@ void Analyse(string adc, string path, string output, int r, int ch, int pedestal
     La macro lee los ficheros con los runes guardados en ROOT, y crea un fichero en AnalysisROOT con los perfiles de centelleo para todos los canales.
   */
 
-  ana::Run_t myrun(r,{{path+Form("run%i_ch%i.root",r,ch),"ADC0"}}, adc, range1, range2, ped, -1);
+  ana::Run_t myrun(r,{{path+Form("run%02i_ch%i.root",r,ch),"ADC0"}}, adc, range1, range2, ped, -1);
 
   // Variables requeridas para todas las funciones que s emuestran a continuación
   std::vector<double> SPEAmp = {38.6, 24.8, 25.5}; myrun.SetSPEAmps(SPEAmp);
