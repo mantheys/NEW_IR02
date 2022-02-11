@@ -4,7 +4,7 @@
 //___EXECUTE USING THE FOLLOWING COMMAND: root -l EventDisplay.C+(\"config_file.txt\") _________________________________________________________//
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Analyse(string adc, string path, int r, int ch, int ped, double range1, double range2, std::vector<bool> conditions) 
+void Analyse(string adc, string path, string range_type, int r, int ch, int ped, double range1, double range2, std::vector<bool> conditions) 
 { /* Macro para visualizar eventos y ver cómo afectan los cortes que queremos establecer
   En Analyse se incluyen las variables que se pasan a la clase Run_t y las condiciones de activación del resto de funciones. */
   
@@ -18,13 +18,13 @@ void Analyse(string adc, string path, int r, int ch, int ped, double range1, dou
   std::vector<double> SPEAmp={38.6,24.8,25.5}; myrun.SetSPEAmps(SPEAmp);//Amplitud del SPE en cuentas de ADC
   myrun.SelectChannels({0}); myrun.Process();
   myrun.ParSet->t3 = 500e-9; //Fijamos el rango de integración de Q3 como 500ns tras el pico.
-	
+	myrun.ParSet->setConversionFactor(-(16384.0/2.0)*1030);
   // Funciones que se aplicna a la clase Run_t y tienen como finalidad visualizar eventos individuales o hacer un estudio preliminar
   if (conditions[0] == true){myrun.PlotPedestals();}
   if (conditions[1] == true){myrun.PlotPeakTimes();}
   if (conditions[2] == true)
   {
-    TH1F *h0 = myrun.TH1Charge(0,"Range","pC");h0->Draw();gPad->Update();lets_pause();
+    TH1F *h0 = myrun.TH1Charge(0,range_type,"pC");h0->Draw();gPad->Update();lets_pause();
     if (conditions[3] == true){myrun.autofit(h0, false, "test");}
   }
   if (conditions[4] == true){TH1F *h0 = myrun.TH1Amp(0);h0->Draw();gPad->Update();lets_pause();}
@@ -46,8 +46,8 @@ void EventDisplay(string input = "config_file.txt")
   double isignaltime; double fsignaltime;
   isignaltime = DoubleInput(input, "I_SIGNALTIME"); fsignaltime = DoubleInput(input, "F_SIGNALTIME");
 
-  string adc; string path;
-  adc = StringInput(input, "ADC"); path = StringInput(input, "PATH");
+  string adc; string path; string range_type;
+  adc = StringInput(input, "ADC"); path = StringInput(input, "PATH"); range_type = StringInput(input, "RANGE_TYPE");
 
   std::vector<string> keywords; std::vector<bool> conditions; conditions = {};
   keywords = {"PLOT_PEDESTALS","PLOT_PEAKTIMES","CHARGE_HIST","CHARGE_HIST_AUTOFIT","MAX_AMP_HIST","EVENT_DISPLAY"};
@@ -59,7 +59,7 @@ void EventDisplay(string input = "config_file.txt")
   //___LAS VARIABLES QUE SE HAN IMPORTADO SE PASAN A LA FUNCIÓN ANALYSE QUE A SU VEZ LLAMA AL RUN_T PERTINENTE Y EJECUTA LAS FUNCIONES ESCOGIDAS___//  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  for (int run=irun; run<=frun; run++) Analyse(adc, path, run, ch, ped, isignaltime, fsignaltime, conditions);
+  for (int run=irun; run<=frun; run++) Analyse(adc, path, range_type, run, ch, ped, isignaltime, fsignaltime, conditions);
   /*  0.  Path de la carpeta que incluye los archivos .root
       1.  Numero de Run
       2.  Canal del ADC que figura en el nombre del .root
