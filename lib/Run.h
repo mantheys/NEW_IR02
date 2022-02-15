@@ -85,7 +85,8 @@ namespace ana
 
          if (adcmode == "DT5725")
          {
-            ParSet->setConversionFactor(-(16384.0 / 2.0) * 50.0);
+            //ParSet->setConversionFactor(-(16384.0 / 2.0) * 50.0);
+            ParSet->setConversionFactor(-(16384.0/2.0)*1030);
             ADCDynamicRange = 16384;
             ParSet->setBaselineAmpLimit(24);
             Sampling = 4e-9;
