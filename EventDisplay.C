@@ -18,7 +18,7 @@ void Analyse(string adc, string path, string range_type, int r, int ch, int ped,
   std::vector<double> SPEAmp={38.6,24.8,25.5}; myrun.SetSPEAmps(SPEAmp);//Amplitud del SPE en cuentas de ADC
   myrun.SelectChannels({0}); myrun.Process();
   myrun.ParSet->t3 = 500e-9; //Fijamos el rango de integración de Q3 como 500ns tras el pico.
-	myrun.ParSet->ConversionFactor = (-(16384.0/2.0)*1030);
+	
   // Funciones que se aplicna a la clase Run_t y tienen como finalidad visualizar eventos individuales o hacer un estudio preliminar
   if (conditions[0] == true){myrun.PlotPedestals();}
   if (conditions[1] == true){myrun.PlotPeakTimes();}
@@ -26,9 +26,10 @@ void Analyse(string adc, string path, string range_type, int r, int ch, int ped,
   {
     TH1F *h0 = myrun.TH1Charge(0,range_type,"pC");h0->Draw();gPad->Update();lets_pause();
     if (conditions[3] == true){myrun.autofit(h0, false, "test");}
+    if (conditions[4] == true){myrun.HistEventCounter(h0);}
   }
-  if (conditions[4] == true){TH1F *h0 = myrun.TH1Amp(0);h0->Draw();gPad->Update();lets_pause();}
-  if (conditions[5] == true){myrun.LoopWaveforms(0,"paqr",NULL);}
+  if (conditions[5] == true){TH1F *h0 = myrun.TH1Amp(0);h0->Draw();gPad->Update();lets_pause();}
+  if (conditions[6] == true){myrun.LoopWaveforms(0,"paqr",NULL);}
  
   myrun.Close();
 }
@@ -50,7 +51,7 @@ void EventDisplay(string input = "config_file.txt")
   adc = StringInput(input, "ADCMODE"); path = StringInput(input, "PATH"); range_type = StringInput(input, "RANGE_TYPE");
 
   std::vector<string> keywords; std::vector<bool> conditions; conditions = {};
-  keywords = {"PLOT_PEDESTALS","PLOT_PEAKTIMES","CHARGE_HIST","CHARGE_HIST_AUTOFIT","HIST_MAX_AMP","EVENT_DISPLAY"};
+  keywords = {"PLOT_PEDESTALS","PLOT_PEAKTIMES","CHARGE_HIST","CHARGE_HIST_AUTOFIT","HIST_EVENT_COUNTER","HIST_MAX_AMP","EVENT_DISPLAY"};
 
   for(vector<string>::const_iterator key = keywords.begin(); key != keywords.end(); ++key)
   {bool condition; condition = BoolInput(input, *key); conditions.push_back(condition);}
@@ -59,7 +60,7 @@ void EventDisplay(string input = "config_file.txt")
   //___LAS VARIABLES QUE SE HAN IMPORTADO SE PASAN A LA FUNCIÓN ANALYSE QUE A SU VEZ LLAMA AL RUN_T PERTINENTE Y EJECUTA LAS FUNCIONES ESCOGIDAS___//  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  for (int run=irun; run<=frun; run++) Analyse(adc, path, range_type, run, ch, ped, isignaltime, fsignaltime, conditions);
+  for (int run=irun; run<=frun; run++){Analyse(adc, path, range_type, run, ch, ped, isignaltime, fsignaltime, conditions);}
   /*  0.  Path de la carpeta que incluye los archivos .root
       1.  Numero de Run
       2.  Canal del ADC que figura en el nombre del .root

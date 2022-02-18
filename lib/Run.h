@@ -4252,7 +4252,30 @@ namespace ana
                cout << "\nFile with name '"; cout << filename; cout << ".txt' has been generated.\n\n";
             }
             
-         }   
+         }
+
+      }
+      void HistEventCounter(TH1F* h)
+      { // Función contar eventos en un histograma
+         cout << "\nEnter rangevalues for event counting\n";
+         int peaks = 1; cout << "Number of ranges?: "; cin >> peaks;
+
+         for (int x = 1; x <= peaks; x++)
+         {
+            double min_value = 0; cout << "Min value?: "; cin >> min_value;
+            Int_t min_bin = h->GetXaxis()->FindBin(min_value);
+            double max_value = 0; cout << "Max value?: "; cin >> max_value;
+            Int_t max_bin = h->GetXaxis()->FindBin(max_value);
+
+            int counts = 0;
+            for (int p=min_bin;p<max_bin;p++)
+            {
+               Double_t yp = h->GetBinContent(p);
+               counts = counts + yp;
+            }
+            cout << "Total number of events between "; cout << min_value; cout << " and "; cout << max_value; cout << " = "; cout << counts; cout << "\n";
+         }
+             
       }
    };
 }

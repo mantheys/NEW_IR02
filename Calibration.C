@@ -19,6 +19,7 @@ void Analyse(string adc, string path, string output, int r, int ch, int ped, dou
   myrun.SelectChannels({0}); myrun.Process();
   myrun.ParSet->t3 = 500e-9; //Fijamos el rango de integración de Q3 como 500ns tras el pico.
 	
+  //myrun.ParSet->ConversionFactor = (-(16384.0/2.0)*1030);
   // Funciones que se aplicna a la clase Run_t y tienen como finalidad visualizar eventos individuales o hacer un estudio preliminar
   if (conditions[0] == true)
   {
@@ -43,7 +44,7 @@ void Calibration(string input = "config_file.txt")
   isignaltime = DoubleInput(input, "I_SIGNALTIME"); fsignaltime = DoubleInput(input, "F_SIGNALTIME");
 
   string adc; string path; string output;
-  adc = StringInput(input, "ADC"); path = StringInput(input, "PATH"); output = StringInput(input, "OUTPUT_GAIN");
+  adc = StringInput(input, "ADCMODE"); path = StringInput(input, "PATH"); output = StringInput(input, "OUTPUT_GAIN");
 
   std::vector<string> keywords; std::vector<bool> conditions; conditions = {};
   keywords = {"CHARGE_HIST","CHARGE_HIST_AUTOFIT"};
