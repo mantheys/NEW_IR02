@@ -1,6 +1,6 @@
 #include "lib/headers.h"
 
-void Analyse(string path, string output, int r, int ch, int ped, double range1, double range2, int min_amp, int max_amp, std::vector<bool> conditions, string adcmode)
+void Analyse(string path, string output, int r, int ch, int ped, double range1, double range2, int min_amp, int max_amp, std::vector<bool> conditions, string adc)
 { /* Macro para obtener la waveform promedio de un run.
     La macro lee los ficheros con los runes guardados en ROOT, y crea un fichero en AnalysisROOT con los perfiles de centelleo para todos los canales.
   */
