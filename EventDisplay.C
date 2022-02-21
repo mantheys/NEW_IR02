@@ -4,11 +4,11 @@
 //___EXECUTE USING THE FOLLOWING COMMAND: root -l EventDisplay.C+(\"config_file.txt\") _________________________________________________________//
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Analyse(string adc, string path, string range_type, int r, int ch, int ped, double range1, double range2, std::vector<bool> conditions) 
+void Analyse(string adc, string path, string range_type, int r, int ch, int ped, double range1, double range2, double conv_factor, std::vector<bool> conditions) 
 { /* Macro para visualizar eventos y ver cómo afectan los cortes que queremos establecer
   En Analyse se incluyen las variables que se pasan a la clase Run_t y las condiciones de activación del resto de funciones. */
   
-  ana::Run_t myrun(r,{{path+Form("run%02i_ch%i.root",r,ch),"ADC0"}}, adc, range1, range2, ped, -1);
+  ana::Run_t myrun(r,{{path+Form("run%02i_ch%i.root",r,ch),"ADC0"}}, adc, range1, range2, ped, -1, conv_factor);
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //___ESTE ES EL CUERPO PRINCIPAL DE LA MACRO DONDE SE CONFIGURA SU FUNCIONALIDAD Y FACTORES DE CONVERSIÓN___//
@@ -44,8 +44,8 @@ void EventDisplay(string input = "config_file.txt")
   int irun; int frun; int ch; int ped;
   irun = IntInput(input, "I_RUN"); frun = IntInput(input, "F_RUN"); ch = IntInput(input, "CHANNEL"); ped = IntInput(input, "PEDESTAL_RANGE");
 
-  double isignaltime; double fsignaltime;
-  isignaltime = DoubleInput(input, "I_SIGNALTIME"); fsignaltime = DoubleInput(input, "F_SIGNALTIME");
+  double isignaltime; double fsignaltime; double conv_factor;
+  isignaltime = DoubleInput(input, "I_SIGNALTIME"); fsignaltime = DoubleInput(input, "F_SIGNALTIME"); conv_factor = DoubleInput(input, "CONVERSION_FACTOR");
 
   string adc; string path; string range_type;
   adc = StringInput(input, "ADCMODE"); path = StringInput(input, "PATH"); range_type = StringInput(input, "RANGE_TYPE");
