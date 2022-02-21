@@ -72,7 +72,7 @@ namespace ana
             throw std::exception();
          }
       }
-      Run_t(int r, std::vector<std::pair<string, string>> ChannelsToRead, string adcm = "", double r1 = 1.e-6, double r2 = 2.e-6, int pr = 30, int mevtp = 200, string cc = "Gains/gains_20190912.csv", int tr = 50) : Number(r), adcmode(adcm), range1(r1), range2(r2), PedRange(pr), TriggerRange(tr), MaximumEventsToProcess(mevtp), calibration(cc)
+      Run_t(int r, std::vector<std::pair<string, string>> ChannelsToRead, string adcm = "", double r1 = 1.e-6, double r2 = 2.e-6, int pr = 30, int mevtp = 200, double conv_factor = 50, string cc = "Gains/gains_20190912.csv", int tr = 50) : Number(r), adcmode(adcm), range1(r1), range2(r2), PedRange(pr), TriggerRange(tr), MaximumEventsToProcess(mevtp), calibration(cc)
       {
 
          cout << "Processing run " << Number << endl;
@@ -82,11 +82,12 @@ namespace ana
          ParSet->setTriggerRange(TriggerRange);
          ParSet->setRange1(range1);
          ParSet->setRange2(range2);
+	 ParSet->setConversionFactor(-(16384.0/2.0)*conv_factor);
 
          if (adcmode == "DT5725")
          {
             //ParSet->setConversionFactor(-(16384.0 / 2.0) * 50.0);
-            ParSet->setConversionFactor(-(16384.0/2.0)*1030);
+            //ParSet->setConversionFactor(-(16384.0/2.0)*1030);
             ADCDynamicRange = 16384;
             ParSet->setBaselineAmpLimit(24);
             Sampling = 4e-9;
