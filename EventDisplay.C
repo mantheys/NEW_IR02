@@ -60,7 +60,7 @@ void EventDisplay(string input = "config_file.txt")
   //___LAS VARIABLES QUE SE HAN IMPORTADO SE PASAN A LA FUNCIÓN ANALYSE QUE A SU VEZ LLAMA AL RUN_T PERTINENTE Y EJECUTA LAS FUNCIONES ESCOGIDAS___//  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  for (int run=irun; run<=frun; run++){Analyse(adc, path, range_type, run, ch, ped, isignaltime, fsignaltime, conditions);}
+  for (int run=irun; run<=frun; run++){Analyse(adc, path, range_type, run, ch, ped, isignaltime, fsignaltime, conv_factor, conditions);}
   /*  0.  Path de la carpeta que incluye los archivos .root
       1.  Numero de Run
       2.  Canal del ADC que figura en el nombre del .root

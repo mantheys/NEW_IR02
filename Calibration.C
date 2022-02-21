@@ -4,11 +4,11 @@
 //___EXECUTE USING THE FOLLOWING COMMAND: root -l Calibration.C+(\"config_file.txt\") ________________________________________________________________________//
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Analyse(string adc, string path, string output, int r, int ch, int ped, double range1, double range2, std::vector<bool> conditions) 
+void Analyse(string adc, string path, string output, int r, int ch, int ped, double range1, double range2, double conv_factor, std::vector<bool> conditions) 
 { /* Macro para visualizar eventos y ver cómo afectan los cortes que queremos establecer
   En Analyse se incluyen las variables que se pasan a la clase Run_t y las condiciones de activación del resto de funciones. */
   
-  ana::Run_t myrun(r,{{path+Form("run%02i_ch%i.root",r,ch),"ADC0"}}, adc, range1, range2, ped, -1);
+  ana::Run_t myrun(r,{{path+Form("run%02i_ch%i.root",r,ch),"ADC0"}}, adc, range1, range2, ped, -1, conv_factor);
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //___ESTE ES EL CUERPO PRINCIPAL DE LA MACRO DONDE SE CONFIGURA SU FUNCIONALIDAD Y FACTORES DE CONVERSIÓN___//
@@ -40,10 +40,10 @@ void Calibration(string input = "config_file.txt")
   int irun; int frun; int ch; int ped;
   irun = IntInput(input, "I_RUN"); frun = IntInput(input, "F_RUN"); ch = IntInput(input, "CHANNEL"); ped = IntInput(input, "PEDESTAL_RANGE");
 
-  double isignaltime; double fsignaltime;
-  isignaltime = DoubleInput(input, "I_SIGNALTIME"); fsignaltime = DoubleInput(input, "F_SIGNALTIME");
+  double isignaltime; double fsignaltime; double conv_factor;
+  isignaltime = DoubleInput(input, "I_SIGNALTIME"); fsignaltime = DoubleInput(input, "F_SIGNALTIME");conv_factor = DoubleInput(input, "CONVERSION_FACTOR");
 
-  string adc; string path; string output;
+  string adc; string path; string output; 
   adc = StringInput(input, "ADCMODE"); path = StringInput(input, "PATH"); output = StringInput(input, "OUTPUT_GAIN");
 
   std::vector<string> keywords; std::vector<bool> conditions; conditions = {};
@@ -56,7 +56,7 @@ void Calibration(string input = "config_file.txt")
   //___LAS VARIABLES QUE SE HAN IMPORTADO SE PASAN A LA FUNCIÓN ANALYSE QUE A SU VEZ LLAMA AL RUN_T PERTINENTE Y EJECUTA LAS FUNCIONES ESCOGIDAS___//  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  for (int run=irun; run<=frun; run++) Analyse(adc, path, output+Form("_RUN%i_CH%i",run,ch), run, ch, ped, isignaltime, fsignaltime, conditions);
+  for (int run=irun; run<=frun; run++) Analyse(adc, path, output+Form("_RUN%i_CH%i",run,ch), run, ch, ped, isignaltime, fsignaltime, conv_factor, conditions);
   /*  0.  Path de la carpeta que incluye los archivos .root
       1.  Numero de Run
       2.  Canal del ADC que figura en el nombre del .root
