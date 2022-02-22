@@ -14,15 +14,16 @@ void Analyse(string adc, string path, string output, int r, int ch, int ped, dou
   int show = 0;
 
   if (conditions[0] == true){myrun.SetCutMaxAmplitudeRange(min_amp,max_amp);}
-  if (conditions[1] == true){myrun.SetMaximumWaveformsToProcess(-1);}
-  if (conditions[2] == true){myrun.ParSet->setADCAmplitudeThreshold(-1000);}
-  if (conditions[3] == true){show = 1;}
-  myrun.Plot36("ScintProfFirstSignalBin", output+Form("_RUN%02i_CH%i.root",r,ch), 0, show);
+  if (conditions[1] == true){myrun.SetCutPedSTD();}
+  if (conditions[2] == true){myrun.SetMaximumWaveformsToProcess(-1);}
+  if (conditions[3] == true){myrun.ParSet->setADCAmplitudeThreshold(-1000);}
+  if (conditions[4] == true){show = 1;}
+  myrun.Plot36("ScintProfFirstSignalBin", output+Form("_run%02i_ch%i.root",r,ch), 0, show);
   
   myrun.Close();
 }
 
-void AverageWaveform(string input = "config_file.txt")
+void AverageWaveform(string input = "aw_config_file.txt")
 {
   int irun; int frun; int ch; int ped; int min_amp; int max_amp;
   irun = IntInput(input, "I_RUN"); frun = IntInput(input, "F_RUN"); ch = IntInput(input, "CHANNEL"); ped = IntInput(input, "PEDESTAL_RANGE");
@@ -35,7 +36,7 @@ void AverageWaveform(string input = "config_file.txt")
   adc = StringInput(input, "ADCMODE"); path = StringInput(input, "PATH"); output = StringInput(input, "OUTPUT_FILE");
 
   std::vector<string> keywords; std::vector<bool> conditions; conditions = {};
-  keywords = {"CUT_MAX_AMPLITUDE","AMP_WAVEFORMS","ADC_AMP_THRESHOLD","SHOW_AVERAGE"};
+  keywords = {"CUT_MAX_AMPLITUDE","CUT_PED_STD","AMP_WAVEFORMS","ADC_AMP_THRESHOLD","SHOW_AVERAGE"};
 
   for(vector<string>::const_iterator key = keywords.begin(); key != keywords.end(); ++key)
   {bool condition; condition = BoolInput(input, *key); conditions.push_back(condition);}
