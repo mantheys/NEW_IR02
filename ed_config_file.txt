@@ -1,4 +1,4 @@
-    #############################
+#############################
 #___GENERAL_CONFIGURATION___#
 #############################
 
@@ -13,24 +13,24 @@ F_RUN 77
 
 CHANNEL 0
 
-CONVERSION_FACTOR 250.0
+CONVERSION_FACTOR    1030.0
+
+I_SIGNALTIME         2.25e-6
+F_SIGNALTIME         3.25e-6
+
+PEDESTAL_RANGE       400
 
 #####################
 #___EVENT_DISPLAY___#
 #####################
 
-I_SIGNALTIME 2.25e-6
-F_SIGNALTIME 3.25e-6
-
-PEDESTAL_RANGE 400
-
 RANGE_TYPE Range
 
-PLOT_PEDESTALS      0
-PLOT_PEAKTIMES      0
-CHARGE_HIST         1
-CHARGE_HIST_AUTOFIT 0
-HIST_EVENT_COUNTER  1
-HIST_MAX_AMP        0
-EVENT_DISPLAY       0
+PLOT_PEDESTALS       0
+PLOT_PEAKTIMES       0
+CHARGE_HIST          0
+CHARGE_HIST_AUTOFIT  0
+HIST_EVENT_COUNTER   0
+HIST_MAX_AMP         0
+EVENT_DISPLAY        0
 

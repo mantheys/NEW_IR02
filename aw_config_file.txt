@@ -1,4 +1,6 @@
+#############################
 #___GENERAL_CONFIGURATION___#
+#############################
 
 ADCMODE DT5725
 
@@ -7,34 +9,30 @@ ADCMODE DT5725
 PATH /pnfs/ciemat.es/data/neutrinos/Super-cells_LAr/Feb22_2/ROOT/
 
 I_RUN 25
-
 F_RUN 25
 
 CHANNEL 4
 
-CONVERSION_FACTOR 50.0
+CONVERSION_FACTOR    1030.0
 
-I_SIGNALTIME 1.8e-6
+I_SIGNALTIME         1.8e-6
+F_SIGNALTIME         2.8e-6
 
-F_SIGNALTIME 9.8e-6
+PEDESTAL_RANGE       400
 
-PEDESTAL_RANGE 400
-
+########################
 #___AVERAGE_WAVEFORM___#
+########################
 
-CUT_MAX_AMPLITUDE 0
-
-MIN_AMP 0
-
-MAX_AMP 10000
-
-CUT_PED_STD 1
-
-AMP_WAVEFORMS 1
-
-ADC_AMP_THRESHOLD 1
-
-SHOW_AVERAGE 1
+CUT_MAX_AMPLITUDE    0
+ 
+MIN_AMP              0
+MAX_AMP              0
+ 
+CUT_PED_STD          1
+AMP_WAVEFORMS        1
+ADC_AMP_THRESHOLD    1
+SHOW_AVERAGE         1
 
 OUTPUT_FILE AnalysisROOT/ScintProf
 
