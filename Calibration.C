@@ -30,7 +30,7 @@ void Analyse(string adc, string path, string output, int r, int ch, int ped, dou
   //myrun.Close();
 }
 
-void Calibration(string input = "config_file.txt")
+void Calibration(string input = "ed_config_file.txt")
 { /* Función principal de esta macro. Las direfentes funciones _Input() llaman al archivo de configuracion e importan las variables pertinentes */
 
   /////////////////////////////////////////////////////////////////////

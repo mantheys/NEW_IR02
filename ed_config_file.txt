@@ -1,0 +1,36 @@
+    #############################
+#___GENERAL_CONFIGURATION___#
+#############################
+
+ADCMODE DT5725
+
+#PATH ROOT/
+#PATH /pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Feb_2/ROOT/
+PATH /pnfs/ciemat.es/data/neutrinos/Super-cells_LAr/Feb22/ROOT/
+
+I_RUN 77
+F_RUN 77
+
+CHANNEL 0
+
+CONVERSION_FACTOR 250.0
+
+#####################
+#___EVENT_DISPLAY___#
+#####################
+
+I_SIGNALTIME 2.25e-6
+F_SIGNALTIME 3.25e-6
+
+PEDESTAL_RANGE 400
+
+RANGE_TYPE Range
+
+PLOT_PEDESTALS      0
+PLOT_PEAKTIMES      0
+CHARGE_HIST         1
+CHARGE_HIST_AUTOFIT 0
+HIST_EVENT_COUNTER  1
+HIST_MAX_AMP        0
+EVENT_DISPLAY       0
+
