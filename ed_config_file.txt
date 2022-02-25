@@ -5,13 +5,13 @@
 ADCMODE DT5725
 
 #PATH ROOT/
-#PATH /pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Feb_2/ROOT/
-PATH /pnfs/ciemat.es/data/neutrinos/Super-cells_LAr/Feb22/ROOT/
+#PATH /pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Dic_21/ROOT/
+PATH /pnfs/ciemat.es/data/neutrinos/Super-cells_LAr/Dic21/ROOT/
 
-I_RUN 77
-F_RUN 77
+I_RUN 231
+F_RUN 233
 
-CHANNEL 0
+CHANNEL 4
 
 CONVERSION_FACTOR    1030.0
 
@@ -20,9 +20,9 @@ F_SIGNALTIME         3.25e-6
 
 PEDESTAL_RANGE       400
 
-#####################
-#___EVENT_DISPLAY___#
-#####################
+#############################
+#_______EVENT_DISPLAY_______#
+#############################
 
 RANGE_TYPE Range
 
@@ -32,5 +32,4 @@ CHARGE_HIST          0
 CHARGE_HIST_AUTOFIT  0
 HIST_EVENT_COUNTER   0
 HIST_MAX_AMP         0
-EVENT_DISPLAY        0
-
+EVENT_DISPLAY        1

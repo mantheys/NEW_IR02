@@ -5,29 +5,29 @@
 ADCMODE DT5725
 
 #PATH ROOT/
-#PATH /pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Feb_2/ROOT/
-PATH /pnfs/ciemat.es/data/neutrinos/Super-cells_LAr/Feb22_2/ROOT/
+#PATH /pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Dic_21/ROOT/
+PATH /pnfs/ciemat.es/data/neutrinos/Super-cells_LAr/Dic21/ROOT/
 
-I_RUN 25
-F_RUN 25
+I_RUN 231
+F_RUN 233
 
 CHANNEL 4
 
 CONVERSION_FACTOR    1030.0
 
-I_SIGNALTIME         1.8e-6
-F_SIGNALTIME         2.8e-6
+I_SIGNALTIME         2.25e-6
+F_SIGNALTIME         3.25e-6
 
 PEDESTAL_RANGE       400
 
-########################
-#___AVERAGE_WAVEFORM___#
-########################
+##############################
+#______AVERAGE_WAVEFORM______#
+##############################
 
 CUT_MAX_AMPLITUDE    0
  
-MIN_AMP              0
-MAX_AMP              0
+MIN_AMP              20
+MAX_AMP              30
  
 CUT_PED_STD          1
 AMP_WAVEFORMS        1
@@ -35,4 +35,3 @@ ADC_AMP_THRESHOLD    1
 SHOW_AVERAGE         1
 
 OUTPUT_FILE AnalysisROOT/ScintProf
-

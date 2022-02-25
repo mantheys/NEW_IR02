@@ -24,6 +24,7 @@
 #include <TStyle.h>
 #include <TFitResult.h>
 
+
 using namespace std;
 void lets_pause()
 {
@@ -69,3 +70,4 @@ int lets_pause(unsigned int &counter)
 #include "RunCollection.h"
 #include "Decon.h"
 #include "InputConfig.h"
+#include "MyVar.h"
