@@ -215,15 +215,12 @@ void ChargeSpectrum(string input = "cs_config_file.txt")
   const Run_map map_of_runs = Run_map("mapa_feb_2.json");
   std::vector<int> runs;
   std::vector<string> label;
-  std::vector<double> gains_sipm289;
-  std::vector<double> gains_sipm290;
-  std::vector<double> gains_pmt;
-  std::vector<double> gains_sc;
   std::vector<double> conv_fact;
 
   for (auto i:map_of_runs.json_map) 
   {
-    if (i["tipo"] == "coincidencia" && i["threshold"] == 200 &&  i["ov_sipm"] == 4 &&  i["ov_pmt"] == 1200)
+    if (i["tipo"] == "coincidencia" && i["threshold"] == 200 &&  i["ov_sipm"] == 4 &&  i["v_pmt"] == 1200)
+    // if (i["run"] == 26)
     {
       runs.push_back(i["run"]);
       label.push_back(to_string(i["dia"])+" Feb");
@@ -244,14 +241,13 @@ void ChargeSpectrum(string input = "cs_config_file.txt")
   /* >> Ganancias si no estan leidas del json */
   std::vector<double> gains_sipm1(n,6.77E+06); //Mean + 4OV + ped-1PE
 
-
   if (debug)
   {
     for (auto w:channels) cout << "Channels: " << w << endl;
     for (auto test:runs) cout << "Runs: " << test << endl;
-    for (auto l:label) cout << l << endl;
+    for (auto l:label) cout << "Label: " << l << endl;
     for (auto i:var) cout << "Charge Range: " << i << endl;
-    for (auto test5:conv_fact) cout << test5 << endl;
+    for (auto factor:conv_fact) cout << factor << endl;
   }
 
   /* En esta funcion las ganancias de todos los canales estan definidos como vectores */
