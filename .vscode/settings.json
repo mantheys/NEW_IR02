@@ -52,6 +52,7 @@
         "mutex": "cpp",
         "ratio": "cpp",
         "system_error": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "ChargeSpectrum_NEW.C": "cpp"
     }
 }

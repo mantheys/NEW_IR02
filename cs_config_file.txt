@@ -1,0 +1,25 @@
+#############################
+#___GENERAL_CONFIGURATION___#
+#############################
+
+PATH /pnfs/ciemat.es/data/neutrinos/Super-cells_LAr/Feb22_2/AnalysisROOT/
+
+JSON_NAME mapa_feb_2.json
+
+CHANNEL 0
+
+#############################
+#______CHARGE_SPECTRUM______#
+#############################
+
+DEBUG 1
+
+RANGE_TYPE Range
+
+PLOT_PEDESTALS       0
+PLOT_PEAKTIMES       0
+CHARGE_HIST          0
+CHARGE_HIST_AUTOFIT  0
+HIST_EVENT_COUNTER   0
+HIST_MAX_AMP         0
+EVENT_DISPLAY        1
