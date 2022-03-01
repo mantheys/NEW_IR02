@@ -4,8 +4,6 @@
 
 ADCMODE DT5725
 
-#PATH ROOT/
-#PATH /pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Dic_21/ROOT/
 PATH /pnfs/ciemat.es/data/neutrinos/Super-cells_LAr/Feb22/ROOT/
 
 I_RUN 2
@@ -24,19 +22,23 @@ PEDESTAL_RANGE       400
 #______AVERAGE_WAVEFORM______#
 ##############################
 
+# Amp event cut (use limits in int counts)
 CUT_MAX_AMPLITUDE    0
  
 MIN_AMP              0
 MAX_AMP              0
 
+# Charge event cut (use limits in double pC)
 CUT_MAX_CHARGE       1
  
 MIN_CHARGE           0.25
 MAX_CHARGE           0.45
- 
+
+# Additional cuts and options
 CUT_PED_STD          1
 AMP_WAVEFORMS        1
 ADC_AMP_THRESHOLD    1
 SHOW_AVERAGE         1
 
+# Name of the output file
 OUTPUT_FILE AnalysisROOT/ScintProf
