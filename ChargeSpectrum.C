@@ -6,57 +6,46 @@
 
 #include"lib/headers.h"
 
-/* Draw_vector() -> Funcion con parametros vectorizados para todos los canales de manera que podemos representar todas las 
-cargas/amplitudes de todos los dias en el mismo histograma. Ademas se puede hacer un fit a todos y guardar los valores en un txt :)
-Se podria introducir una ganancia diferente para cada run aunque es más coherente usar un valor medio para todos los dias. */
 void Draw_vector(string path, std::vector<int> mych, std::vector<int> runs, std::vector<string> name, bool rate, std::vector<string> var, std::vector<double> conv_fact,
 double aef_sipm, double aef_pmt, double aef_sc, bool normalize=false, double Rebin=1, TVirtualPad *pad=NULL, float CustomMaxRange=0)
-{
-  std::vector<double> SPEAmp={38.6,24.8,25.5};//Amplitud del SPE en cuentas de ADC //de Rodrigo --> cambiar por nuevas
-  int n = runs.size(); 
-  std::vector<variable> myvar(n);
-  myvar = MyVar(myvar, n, var, mych, conv_fact);
+{/* Draw_vector() -> Funcion con parametros vectorizados para todos los canales de manera que podemos representar todas las 
+cargas/amplitudes de todos los dias en el mismo histograma. Ademas se puede hacer un fit a todos y guardar los valores en un txt :)
+Se podria introducir una ganancia diferente para cada run aunque es más coherente usar un valor medio para todos los dias. */
+  int n = runs.size();
+
+  std::vector<double> SPEAmp={38.6,24.8,25.5};//Amplitud del SPE en cuentas de ADC //de Rodrigo --> cambiar por nuevas 
+  
+  std::vector<variable> myvar(n); myvar = MyVar(myvar, n, var, mych, conv_fact);
+  
   if(CustomMaxRange!=0) for(int i=0;i<n;i++) myvar[i].limitup=CustomMaxRange;
 
   TFile *ifile[n];
-  for(int i=0;i<n;i++) ifile[i]= new TFile(Form("%srun%02i_NTuple.root",path.c_str(),runs[i])); 
+  for(int i=0;i<n;i++) ifile[i] = new TFile(Form("%srun%02i_NTuple.root",path.c_str(),runs[i])); 
 
-  TNtuple *nt[n];
-  TNtuple *nt_ref[n];
-  Float_t ch; 
-  Float_t time; 
-  Float_t _var; 
+  TNtuple *nt[n]; TNtuple *nt_ref[n]; TH1D *h[n]; TH1D *aux[n]; Float_t ch; Float_t time; Float_t _var; 
 
-  TH1D *h[n];
-  TH1D *aux[n];
   for(int i=0;i<n;i++)
   {
     nt_ref[i]= (TNtuple*)ifile[i]->Get("ntuple");
-    nt[i]= (TNtuple*)ifile[i]->Get("charge");
-    // lets_pause();
-    // cout<<"hecho1"<<endl;
-    nt_ref[i]->SetBranchAddress("ch",&ch);
-    // lets_pause();
-    // cout<<"hecho2"<<endl;
-    nt_ref[i]->SetBranchAddress("time",&time);
-    // lets_pause();
-    // cout<<"hecho3"<<endl;
-    nt[i]->SetBranchAddress(myvar[i].var.c_str(),&_var);
-    // lets_pause();
-    // cout<<"hecho4"<<endl;
+    nt[i]= (TNtuple*)ifile[i]->Get("charge"); // lets_pause(); cout<<"hecho1"<<endl;
+    nt_ref[i]->SetBranchAddress("ch",&ch); // lets_pause(); cout<<"hecho2"<<endl;
+    nt_ref[i]->SetBranchAddress("time",&time); // lets_pause(); cout<<"hecho3"<<endl;
+    nt[i]->SetBranchAddress(myvar[i].var.c_str(),&_var); // lets_pause(); cout<<"hecho4"<<endl;
 
     if(rate) h[i]=new TH1D(Form("h%i",i),Form("%s;%s; Events/s",name[i].c_str(),myvar[i].title.c_str()),400,myvar[i].limitdown,myvar[i].limitup);
     else h[i]=new TH1D(Form("h%i",i),Form("%s;%s; NEvents",name[i].c_str(),myvar[i].title.c_str()),400,myvar[i].limitdown,myvar[i].limitup);
     h[i]->SetLineColor(i+1);if (i==4) h[i]->SetLineColor(i+3); if (i==9) h[i]->SetLineColor(30); // avoid bad colors
     h[i]->SetLineWidth(2);
+
     if(rate) aux[i]=new TH1D(Form("h%i",i),Form("%s;%s; Events/s",name[i].c_str(),myvar[i].title.c_str()),400,myvar[i].limitdown,myvar[i].limitup);
     else aux[i]=new TH1D(Form("h%i",i),Form("%s;%s; NEvents",name[i].c_str(),myvar[i].title.c_str()),400,myvar[i].limitdown,myvar[i].limitup);
     aux[i]->SetLineColor(i+1);if (i==4) aux[i]->SetLineColor(i+3); if (i==9) aux[i]->SetLineColor(30); // avoid bad colors
     aux[i]->SetLineWidth(2);
   }
 
-  cout << "Drawing " << n<< endl;
+  cout << "Drawing " << n << endl;
   double max_charge;
+
   for(int i=0;i<n;i++)
   {
     for(int j=0;j<nt[i]->GetEntries();j++)
@@ -64,51 +53,36 @@ double aef_sipm, double aef_pmt, double aef_sc, bool normalize=false, double Reb
       nt[i]->GetEntry(j);
       nt_ref[i]->GetEntry(j);
       if(ch!=mych[i]) continue;
-      //if (runs[i]==19 && ch==1) {cout << ch << " " << _var << " " << time << " " << mych[i] << " - " << _var*myvar[i].UnitConversion << endl; lets_pause();}
       h[i]->Fill(_var*myvar[i].UnitConversion);
-      //cout<<_var*myvar[i].UnitConversion<<endl;//debug
     }
+
     aux[i]= (TH1D*)h[i]->Clone();
-    // cout << h[i]->GetMaximum();
     h[i]->Rebin(Rebin);
+    
     if(normalize)
     {
       h[i]->Scale(1./ h[i]->GetMaximum());
     }
-  
-    nt_ref[i]->GetEntry(0);
-    double firstime=time;
-    nt_ref[i]->GetEntry(nt_ref[i]->GetEntries()-1);
-    double lasttime=time; 
+    
+    double firstime=time; double lasttime=time;
+    nt_ref[i]->GetEntry(0); nt_ref[i]->GetEntry(nt_ref[i]->GetEntries()-1);
+    
     Double_t duration = (lasttime - firstime)*8.e-9;
-    //cout << duration << endl; lets_pause();
     if(rate) h[i]->Scale(1./duration);
     // else ;//h[i]->Scale(1./h[i]->GetEntries());
   }
 
   TCanvas *c;
-  if(!pad){ c  = new TCanvas("c"); c->cd();}
+  if(!pad){c = new TCanvas("c"); c->cd();}
   else {pad->cd();}
-  gStyle->SetOptTitle(0); gStyle->SetOptStat(0);
-  // gPad->SetLogy();
+  gStyle->SetOptTitle(0); gStyle->SetOptStat(0); // gPad->SetLogy();
 
-  for(int i=0;i<n;i++)
-  { 
-    //gPad->SetGrid(1,1);
-    h[i]->Draw("HIST SAME"); 
-    // h[i]->Rebin(4);
-    //h[i]->Smooth();
-
-    gPad->Update();
-    //h[i]->GetXaxis()->SetRange(h[i]->FindBin(400),h[i]->FindBin(700));
-    //gPad->Update();
-    //cout<<h[i]->GetMean()<<endl; 
-  }
+  for(int i=0;i<n;i++) {h[i]->Draw("HIST SAME"); gPad->Update();}
 
   bool fit=true;
   // bool fit=false;
   // draw the legend
-  TLegend *legend=new TLegend(0.7, 0.6, 0.9, 0.9);
+  TLegend *legend = new TLegend(0.7, 0.6, 0.9, 0.9);
   //legend->SetTextFont(72);
   //legend->SetTextSize(0.04);
   if(fit!=true) for(int i=0;i<n;++i) legend->AddEntry(h[i],name[i].c_str());
@@ -119,8 +93,8 @@ double aef_sipm, double aef_pmt, double aef_sc, bool normalize=false, double Reb
     double min_fit, max_fit;
 	  cout << "Min value for fit: "; cin >> min_fit;
 	  cout << "Max value for fit: "; cin >> max_fit;
-    string filename;
-    cout << "File name?:"; cin >> filename;
+    string filename = Form("CH%i_%s",mych[0],var[0].c_str());
+    // cout << "File name?:"; cin >> filename;
     
     for(int i=0;i<n;i++)
     {
@@ -168,19 +142,19 @@ double aef_sipm, double aef_pmt, double aef_sc, bool normalize=false, double Reb
     // TH1 *hd = (TH1*)gPad->GetPrimitive(Form("h%i",i)); gPad->GetListOfPrimitives()->Remove(hd);
     //  lets_pause();
     { // ------------ Volcamos a txt --------------- 
-    double mu = fb->GetParameter(3*0+1), Dmu = fb->GetParError(3*0+1);
-	  double sigma = fb->GetParameter(3*0+2), Dsigma = fb->GetParError(3*0+2);
-	  double amp = fb->GetParameter(0), Damp = fb->GetParError(0);
-    
-	  // FILE *f = fopen(Form("prueba.txt"), "a");
-	  FILE *f = fopen(Form("fit_data/%s.txt",filename.c_str()), "a");
-	  if (f == NULL)
-	  {
-		printf("Error opening file!\n");
-		exit(1);
-	  }
-	  fprintf(f, "%f\t%f\t%f\t%f\t%f\t%f\n", mu, Dmu, sigma, Dsigma, amp, Damp);
-	  fclose(f);
+      double mu = fb->GetParameter(3*0+1), Dmu = fb->GetParError(3*0+1);
+      double sigma = fb->GetParameter(3*0+2), Dsigma = fb->GetParError(3*0+2);
+      double amp = fb->GetParameter(0), Damp = fb->GetParError(0);
+      
+      // FILE *f = fopen(Form("prueba.txt"), "a");
+      FILE *f = fopen(Form("fit_data/%s.txt",filename.c_str()), "a");
+      if (f == NULL)
+      {
+        printf("Error opening file!\n");
+        exit(1);
+      }
+      fprintf(f, "%f\t%f\t%f\t%f\t%f\t%f\n", mu, Dmu, sigma, Dsigma, amp, Damp);
+      fclose(f);
 	  } //*/
 	  //  lets_pause();
     }
@@ -205,14 +179,14 @@ void ChargeSpectrum(string input = "CONFIG/cs_config_file.txt")
   int ch;
   ch = IntInput(input, "CHANNEL");
 
-  string path; string range_type;
-  path = StringInput(input, "PATH"); range_type = StringInput(input, "RANGE_TYPE");
+  string path; string range_type; string json_file;
+  path = StringInput(input, "PATH"); range_type = StringInput(input, "RANGE_TYPE"); json_file = StringInput(input, "JSON_NAME");
 
   bool debug;
   debug = BoolInput(input, "DEBUG");
 
   /* >> Empleamos el json para seleccionar las runes */
-  const Run_map map_of_runs = Run_map("JSON/mapa_feb_2.json");
+  const Run_map map_of_runs = Run_map(Form("JSON/%s",json_file.c_str()));
   std::vector<int> runs;
   std::vector<string> label;
   std::vector<double> conv_fact;

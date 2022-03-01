@@ -6,12 +6,12 @@ ADCMODE DT5725
 
 #PATH ROOT/
 #PATH /pc/choozdsk01/palomare/SiPM/SC_Fuente_Alpha_Dic_21/ROOT/
-PATH /pnfs/ciemat.es/data/neutrinos/Super-cells_LAr/Dic21/ROOT/
+PATH /pnfs/ciemat.es/data/neutrinos/Super-cells_LAr/Feb22/ROOT/
 
-I_RUN 231
-F_RUN 233
+I_RUN 2
+F_RUN 2
 
-CHANNEL 4
+CHANNEL 6
 
 CONVERSION_FACTOR    1030.0
 
@@ -26,8 +26,13 @@ PEDESTAL_RANGE       400
 
 CUT_MAX_AMPLITUDE    0
  
-MIN_AMP              20
-MAX_AMP              30
+MIN_AMP              0
+MAX_AMP              0
+
+CUT_MAX_CHARGE       1
+ 
+MIN_CHARGE           0.25
+MAX_CHARGE           0.45
  
 CUT_PED_STD          1
 AMP_WAVEFORMS        1

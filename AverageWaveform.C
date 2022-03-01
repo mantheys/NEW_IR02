@@ -1,6 +1,6 @@
 #include "lib/headers.h"
 
-void Analyse(string adc, string path, string output, int r, int ch, int ped, double range1, double range2, int min_amp, int max_amp, double conv_factor, std::vector<bool> conditions)
+void Analyse(string adc, string path, string output, int r, int ch, int ped, double range1, double range2, int min_amp, int max_amp, double min_charge, double max_charge, double conv_factor, std::vector<bool> conditions)
 { /* Macro para obtener la waveform promedio de un run.
     La macro lee los ficheros con los runes guardados en ROOT, y crea un fichero en AnalysisROOT con los perfiles de centelleo para todos los canales.
   */
@@ -14,10 +14,12 @@ void Analyse(string adc, string path, string output, int r, int ch, int ped, dou
   int show = 0;
 
   if (conditions[0] == true){myrun.SetCutMaxAmplitudeRange(min_amp,max_amp);}
-  if (conditions[1] == true){myrun.SetCutPedSTD();}
-  if (conditions[2] == true){myrun.SetMaximumWaveformsToProcess(-1);}
-  if (conditions[3] == true){myrun.ParSet->setADCAmplitudeThreshold(-1000);}
-  if (conditions[4] == true){show = 1;}
+  if (conditions[1] == true){myrun.SetCutChargeRange(min_charge,max_charge);}
+  if (conditions[2] == true){myrun.SetCutPedSTD();}
+  if (conditions[3] == true){myrun.SetMaximumWaveformsToProcess(-1);}
+  if (conditions[4] == true){myrun.ParSet->setADCAmplitudeThreshold(-1000);}
+  if (conditions[5] == true){show = 1;}
+
   myrun.Plot36("ScintProfFirstSignalBin", output+Form("_run%02i_ch%i.root",r,ch), 0, show);
   
   myrun.Close();
@@ -29,19 +31,20 @@ void AverageWaveform(string input = "CONFIG/aw_config_file.txt")
   irun = IntInput(input, "I_RUN"); frun = IntInput(input, "F_RUN"); ch = IntInput(input, "CHANNEL"); ped = IntInput(input, "PEDESTAL_RANGE");
   min_amp = IntInput(input, "MIN_AMP"); max_amp = IntInput(input, "MAX_AMP");
   
-  double isignaltime; double fsignaltime; double conv_factor;
+  double isignaltime; double fsignaltime; double conv_factor; double min_charge; double max_charge;
   isignaltime = DoubleInput(input, "I_SIGNALTIME"); fsignaltime = DoubleInput(input, "F_SIGNALTIME"); conv_factor = DoubleInput(input, "CONVERSION_FACTOR");
+  min_charge = DoubleInput(input, "MIN_CHARGE"); max_charge = DoubleInput(input, "MAX_CHARGE");
 
   string adc; string path; string output; 
   adc = StringInput(input, "ADCMODE"); path = StringInput(input, "PATH"); output = StringInput(input, "OUTPUT_FILE");
 
   std::vector<string> keywords; std::vector<bool> conditions; conditions = {};
-  keywords = {"CUT_MAX_AMPLITUDE","CUT_PED_STD","AMP_WAVEFORMS","ADC_AMP_THRESHOLD","SHOW_AVERAGE"};
+  keywords = {"CUT_MAX_AMPLITUDE","CUT_MAX_CHARGE","CUT_PED_STD","AMP_WAVEFORMS","ADC_AMP_THRESHOLD","SHOW_AVERAGE"};
 
   for(vector<string>::const_iterator key = keywords.begin(); key != keywords.end(); ++key)
   {bool condition; condition = BoolInput(input, *key); conditions.push_back(condition);}
 
-  for (int run=irun; run<=frun; run++){Analyse(adc, path, output, run, ch, ped, isignaltime, fsignaltime, min_amp, max_amp, conv_factor, conditions);}
+  for (int run=irun; run<=frun; run++){Analyse(adc, path, output, run, ch, ped, isignaltime, fsignaltime, min_amp, max_amp, min_charge, max_charge, conv_factor, conditions);}
   /*  0.  Path de la carpeta que incluye los archivos .root
       1.  Numero de Run
       2.  Canal del ADC que figura en el nombre del .root

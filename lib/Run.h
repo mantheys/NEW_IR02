@@ -1027,11 +1027,14 @@ namespace ana
          MyCuts.SetCutS2Amplitude(minAmp);
          CutStatus();
       }
-      void SetCutCharge(double minCharge, double maxCharge)
+      void SetCutCharge(double minCharge_raw, double maxCharge_raw)
       {
+         double minCharge = minCharge_raw*1e-12;
+         double maxCharge = maxCharge_raw*1e-12;
+
          if (EventList.size() == 0)
             Process();
-         cout << "CUT: Selecting any WAVEFORM with total charge between " << minCharge << "Coulombs and " << maxCharge << "Coulombs." << endl;
+         cout << "CUT: Selecting any WAVEFORM with total charge between " << minCharge << " Pico Coulombs and " << maxCharge << " Pico Coulombs." << endl;
          for (unsigned int ev = 0; ev < EventList.size(); ev++)
             for (auto pm : adcchannels)
                if (getWaveform(ev, pm)->getCharge() < minCharge || getWaveform(ev, pm)->getCharge() > maxCharge)
@@ -1039,11 +1042,14 @@ namespace ana
          MyCuts.SetCutCharge(minCharge, maxCharge);
          CutStatus();
       }
-      void SetCutChargeRange(double minCharge, double maxCharge)
+      void SetCutChargeRange(double minCharge_raw, double maxCharge_raw)
       {
+         double minCharge = minCharge_raw*1e-12;
+         double maxCharge = maxCharge_raw*1e-12;
+
          if (EventList.size() == 0)
             Process();
-         cout << "CUT: Selecting any WAVEFORM with integrated charge in the range (" << range1 << "s," << range2 << "s) - between " << minCharge << "Coulombs and " << maxCharge << "Coulombs." << endl;
+         cout << "CUT: Selecting any WAVEFORM with integrated charge in the range (" << range1 << "s," << range2 << "s) - between " << minCharge << " Pico Coulombs and " << maxCharge << " Pico Coulombs." << endl;
          for (unsigned int ev = 0; ev < EventList.size(); ev++)
             for (auto pm : adcchannels)
                if (getWaveform(ev, pm)->getChargeRange() < minCharge || getWaveform(ev, pm)->getChargeRange() > maxCharge)
@@ -1051,11 +1057,14 @@ namespace ana
          MyCuts.SetCutChargeRange(minCharge, maxCharge);
          CutStatus();
       }
-      void SetCutCustomChargeRange(double minCharge, double maxCharge)
+      void SetCutCustomChargeRange(double minCharge_raw, double maxCharge_raw)
       {
+         double minCharge = minCharge_raw*1e-12;
+         double maxCharge = maxCharge_raw*1e-12;
+
          if (EventList.size() == 0)
             Process();
-         cout << "CUT: Selecting any WAVEFORM with total charge between " << minCharge << "Coulombs and " << maxCharge << "Coulombs. Charge integrated over a constant baseline." << endl;
+         cout << "CUT: Selecting any WAVEFORM with total charge between " << minCharge << " Pico Coulombs and " << maxCharge << " Pico Coulombs. Charge integrated over a constant baseline." << endl;
          for (unsigned int ev = 0; ev < EventList.size(); ev++)
             for (auto pm : adcchannels)
             {
