@@ -23,7 +23,7 @@ void Analyse(string adc, string path, string output, int r, int ch, int ped, dou
   myrun.Close();
 }
 
-void AverageWaveform(string input = "aw_config_file.txt")
+void AverageWaveform(string input = "CONFIG/aw_config_file.txt")
 {
   int irun; int frun; int ch; int ped; int min_amp; int max_amp;
   irun = IntInput(input, "I_RUN"); frun = IntInput(input, "F_RUN"); ch = IntInput(input, "CHANNEL"); ped = IntInput(input, "PEDESTAL_RANGE");

@@ -200,7 +200,7 @@ lets_pause();
 lets_pause();
 }
 
-void ChargeSpectrum(string input = "cs_config_file.txt")
+void ChargeSpectrum(string input = "CONFIG/cs_config_file.txt")
 {
   int ch;
   ch = IntInput(input, "CHANNEL");
@@ -212,7 +212,7 @@ void ChargeSpectrum(string input = "cs_config_file.txt")
   debug = BoolInput(input, "DEBUG");
 
   /* >> Empleamos el json para seleccionar las runes */
-  const Run_map map_of_runs = Run_map("mapa_feb_2.json");
+  const Run_map map_of_runs = Run_map("JSON/mapa_feb_2.json");
   std::vector<int> runs;
   std::vector<string> label;
   std::vector<double> conv_fact;

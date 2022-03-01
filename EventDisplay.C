@@ -34,7 +34,7 @@ void Analyse(string adc, string path, string range_type, int r, int ch, int ped,
   myrun.Close();
 }
 
-void EventDisplay(string input = "ed_config_file.txt")
+void EventDisplay(string input = "CONFIG/ed_config_file.txt")
 { /* Función principal de esta macro. Las direfentes funciones _Input() llaman al archivo de configuracion e importan las variables pertinentes */
 
   /////////////////////////////////////////////////////////////////////
