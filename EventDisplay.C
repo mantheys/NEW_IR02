@@ -1,4 +1,5 @@
 #include "lib/headers.h"
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //___EVENTDISPLAY.C ES UNA MACRO PARA VISUALIZAR EVENTOS Y HACER UN ANALISIS PREELIMINAR E INDIVIDUALIZADO DE CORTES Y FACTORES DETERMINANTES___//
 //___EXECUTE USING THE FOLLOWING COMMAND: root -l EventDisplay.C+(\"config_file.txt\") _________________________________________________________//
@@ -42,16 +43,16 @@ void EventDisplay(string input = "CONFIG/ed_config_file.txt")
   /////////////////////////////////////////////////////////////////////  
   
   int irun; int frun; int ch; int ped;
-  irun = IntInput(input, "I_RUN"); frun = IntInput(input, "F_RUN"); ch = IntInput(input, "CHANNEL"); ped = IntInput(input, "PEDESTAL_RANGE");
+  irun = IntInput(input, "I_RUN:"); frun = IntInput(input, "F_RUN:"); ch = IntInput(input, "CHANNEL:"); ped = IntInput(input, "PEDESTAL_RANGE:");
 
   double isignaltime; double fsignaltime; double conv_factor;
-  isignaltime = DoubleInput(input, "I_SIGNALTIME"); fsignaltime = DoubleInput(input, "F_SIGNALTIME"); conv_factor = DoubleInput(input, "CONVERSION_FACTOR");
+  isignaltime = DoubleInput(input, "I_SIGNALTIME:"); fsignaltime = DoubleInput(input, "F_SIGNALTIME:"); conv_factor = DoubleInput(input, "CONVERSION_FACTOR:");
 
   string adc; string path; string range_type;
-  adc = StringInput(input, "ADCMODE"); path = StringInput(input, "PATH"); range_type = StringInput(input, "RANGE_TYPE");
+  adc = StringInput(input, "ADCMODE:"); path = StringInput(input, "PATH:"); range_type = StringInput(input, "RANGE_TYPE:");
 
   std::vector<string> keywords; std::vector<bool> conditions; conditions = {};
-  keywords = {"PLOT_PEDESTALS","PLOT_PEAKTIMES","CHARGE_HIST","CHARGE_HIST_AUTOFIT","HIST_EVENT_COUNTER","HIST_MAX_AMP","EVENT_DISPLAY"};
+  keywords = {"PLOT_PEDESTALS:","PLOT_PEAKTIMES:","CHARGE_HIST:","CHARGE_HIST_AUTOFIT:","HIST_EVENT_COUNTER:","HIST_MAX_AMP:","EVENT_DISPLAY:"};
 
   for(vector<string>::const_iterator key = keywords.begin(); key != keywords.end(); ++key)
   {bool condition; condition = BoolInput(input, *key); conditions.push_back(condition);}

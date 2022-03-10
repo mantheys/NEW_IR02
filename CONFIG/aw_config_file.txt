@@ -2,43 +2,48 @@
 #___GENERAL_CONFIGURATION___#
 #############################
 
-ADCMODE DT5725
+PATH: /pnfs/ciemat.es/data/neutrinos/Super-cells_LAr/Feb22_2/ROOT/
 
-PATH /pnfs/ciemat.es/data/neutrinos/Super-cells_LAr/Feb22/ROOT/
+ADCMODE:                DT5725
 
-I_RUN 2
-F_RUN 2
+I_RUN:                  24
+F_RUN:                  27
 
-CHANNEL 6
+CHANNEL:                6
 
-CONVERSION_FACTOR    1030.0
+CONVERSION_FACTOR:      1030.0
 
-I_SIGNALTIME         2.25e-6
-F_SIGNALTIME         3.25e-6
+I_SIGNALTIME:           1.9e-6
+F_SIGNALTIME:           2.95e-6
 
-PEDESTAL_RANGE       400
+PEDESTAL_RANGE:         400
 
 ##############################
 #______AVERAGE_WAVEFORM______#
 ##############################
 
 # Amp event cut (use limits in int counts)
-CUT_MAX_AMPLITUDE    0
+
+CUT_MAX_AMPLITUDE:      0
  
-MIN_AMP              0
-MAX_AMP              0
+MIN_AMP:                22
+MAX_AMP:                43
 
 # Charge event cut (use limits in double pC)
-CUT_MAX_CHARGE       1
+
+CUT_MAX_CHARGE:         0
  
-MIN_CHARGE           0.25
-MAX_CHARGE           0.45
+MIN_CHARGE:             10
+MAX_CHARGE:             50
 
 # Additional cuts and options
-CUT_PED_STD          1
-AMP_WAVEFORMS        1
-ADC_AMP_THRESHOLD    1
-SHOW_AVERAGE         1
+
+CUT_PED_STD:            1
+AMP_WAVEFORMS:          1
+ADC_THRESHOLD:          1
+ADC_THRESHOLD_VALUE:    40  
+SHOW_AVERAGE:           1
 
 # Name of the output file
-OUTPUT_FILE AnalysisROOT/ScintProf
+
+OUTPUT_FILE:            AnalysisROOT/Feb_2_ScintProf

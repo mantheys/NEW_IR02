@@ -2539,7 +2539,7 @@ namespace ana
       }
       TH1F *TH1Amp(int pm)
       {
-         TH1F *th = new TH1F(Form("Run%i_OpChannel%i_Amp", Number, pm), Form("Run%i_OpChannel%i_%s_Amp;Amplitude (ADC);Events", Number, pm, PMT_SN[pm].c_str()), 500, 0.5, 2000 + 0.5);
+         TH1F *th = new TH1F(Form("Run%i_OpChannel%i_Amp", Number, pm), Form("Run%i_OpChannel%i_%s_Amp;Amplitude (ADC);Events", Number, pm, PMT_SN[pm].c_str()), 5000, 0.1, 5000 + 0.1);
          th->SetLineColor(pm + 1);
          for (unsigned int ev = 0; ev < NEvents; ev++)
          {
@@ -2739,7 +2739,7 @@ namespace ana
          return th;
       }
 
-      TH1F *TH1Charge(int pm, string option = "", string units = "PE", double rangemin = 0, double rangemax = 0)
+      TH1F *TH1Charge(int pm, string option = "", string units = "pC", double rangemin = 0, double rangemax = 0)
       {
          double ChargeFactor = 1.0;
          if (units == "pC")
