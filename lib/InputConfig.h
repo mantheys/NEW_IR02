@@ -96,3 +96,30 @@ bool BoolInput(string input = "config_file.txt", string key = "TEST")
   }
   return b;
 }
+
+std::vector<int> IntVectorInput(string input = "config_file.txt",  string key = "TEST")
+{
+  fstream newfile;
+  std::vector<int> int_vector;
+  newfile.open(input,ios::in); //open a file to perform read operation using file object
+  if (newfile.is_open())
+  {   //checking whether the file is open
+    string tp;
+    while(getline(newfile, tp))
+    { //read data from file object and put it into string.
+      if (tp.rfind(key, 0) == 0)
+      { // pos=0 limits the search to the prefix
+        istringstream stream(tp);
+        string s;
+        while(stream >> s) 
+        {
+          if(s=="CHANNEL") continue; // skip key string
+          int_vector.push_back(std::stoi(s)); // convert string into int
+        }
+      }
+    }
+    newfile.close(); //close the file object.
+  }
+  // for (int n:int_vector) cout << "Vector element:" << n << endl; // check vector elements
+  return int_vector;
+}

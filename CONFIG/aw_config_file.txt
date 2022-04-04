@@ -6,8 +6,8 @@ PATH: /pnfs/ciemat.es/data/neutrinos/Super-cells_LAr/Feb22_2/ROOT/
 
 ADCMODE:                DT5725
 
-I_RUN:                  24
-F_RUN:                  27
+I_RUN:                  35
+F_RUN:                  37
 
 CHANNEL:                6
 
@@ -17,6 +17,10 @@ I_SIGNALTIME:           1.9e-6
 F_SIGNALTIME:           2.95e-6
 
 PEDESTAL_RANGE:         400
+
+# Name of the output file
+
+OUTPUT_FILE:            AnalysisROOT/Jan_ScintProf
 
 ##############################
 #______AVERAGE_WAVEFORM______#
@@ -44,6 +48,3 @@ ADC_THRESHOLD:          1
 ADC_THRESHOLD_VALUE:    40  
 SHOW_AVERAGE:           1
 
-# Name of the output file
-
-OUTPUT_FILE:            AnalysisROOT/Feb_2_ScintProf

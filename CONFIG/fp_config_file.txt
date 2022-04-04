@@ -1,0 +1,13 @@
+#___GENERAL_CONFIGURATION___#
+
+ADCMODE DT5725
+
+IPATH /afs/ciemat.es/user/m/manthey/Set_1/
+OPATH /pnfs/ciemat.es/data/neutrinos/Sergio/M_SC/Set_1/ROOT/
+
+I_RUN 1
+
+F_RUN 1
+
+CHANNEL 8 9 10 11
+
